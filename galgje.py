@@ -1,6 +1,6 @@
 looping=True
 
-
+dupes=0
 speler1gewonnen=0
 speler2gewonnen=0
 looped=0
@@ -9,7 +9,20 @@ lettersright=[]
 woordindexdifficulty1=['hallo,','wereld','mens','ei']
 woordindexdifficulty2=['limousine','familie','computer']
 woordindexdifficulty3=['kippeneieren','computermuis','tafeltennis']
+
+def find_dupes(word,letter):
+	dupes=[]
+	for letter in word:
+		if word.count(letter)>1 and letter not in dupes:
+			dupes.append(letter)
+	return dupes
+
+
+
+
 while looping:
+	dupes=0
+	lettersright=[]
 	looped+=1
 	canguess="ja"
 	loop=True
@@ -44,6 +57,7 @@ while looping:
 		#dit gedeelte (was gek genoeg super makkelijk) zorgt er eerst voor dat de tweede speler niet kan spieken bij de eerste speler en typt even veel underscore als er letters zijn in het woord
 
 		while loop==True:
+			dupes=0
 			print("\n"*100)
 			if guessedright==len(woord):
 				#dit activeert zodraa je alle letters die in het woord zijn zijn geraden
@@ -85,11 +99,14 @@ while looping:
 				if hoeveelsetguess>=1 and hoeveelsetguess!=1:
 					print(previousguess)
 					if previousguess in woord:
+						dupes=find_dupes(woord,guess)
+						
 						previousindex=woord.index(previousguess)
 						previousindex+=1
 						# previousindex is de hoeveelste letter in het woord je laatste gok was. ik doe er 1 bij omdat het anders 1 te laag is :)
 						print(f"je vorige gok, {previousguess},was de "+str(previousindex)+"e letter van het woord!")
-						
+						if previousguess in dupes:
+							print(f"{previousguess} komt meer dan een keer voor in dit woord")
 						volledigevorigeguess=f"{previousguess} {previousindex}"
 						#volledigevorigeguess is je vorige gok en de hoeveelste letter het was in het woord
 						lettersright.append(volledigevorigeguess)
