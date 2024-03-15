@@ -41,7 +41,10 @@ while looping:
 	#alles hiervoor zet gewoon de variables. alles in de loop mag steeds gereset worden en alles buiten de loop niet
 	
 	print("de stand is nu "+str(speler1gewonnen)+"-"+str(speler2gewonnen))
-	woord=input("en wat wil je dat het woord wordt? ")
+	if looped%2==0:
+		woord=input("speler2 wat moet het woord zijn? ")
+	else:
+		woord=input("speler1 wat moet het woord zijn? ")
 	if woord=="qq":
 		print("okee...")
 		print("de uiteindelijke stand is geworden "+str(speler1gewonnen)+"-"+str(speler2gewonnen))
@@ -51,7 +54,10 @@ while looping:
 		#hierstopt hij gewoon het programma als je qq intypt
 	else:
 		print("\n"*10000)
-		print("oke speler 2, het woord dat je moet raden heeft ", len(woord),  " letters")
+		if looped%2==0:
+			print("oke speler 1, het woord dat je moet raden heeft ", len(woord),  " letters")
+		else:
+			print("oke speler 2, het woord dat je moet raden heeft ", len(woord),  " letters")
 		print("_ "*len(woord))
 		letters=len(woord)
 		#dit gedeelte (was gek genoeg super makkelijk) zorgt er eerst voor dat de tweede speler niet kan spieken bij de eerste speler en typt even veel underscore als er letters zijn in het woord
@@ -65,7 +71,10 @@ while looping:
 				guessedwoord=input(f"Nu je alle letters hebt zal je het woord moeten raden. en nog een keer als reminder, dit zijn je letters: {lettersright}. Dus wat is het woord volgens jou? ")
 				if guessedwoord==woord:
 					print("woohoo, je hebt het woord geraden")
-					speler2gewonnen+=1
+					if looped%2==0:
+						speler1gewonnen+=1
+					else:
+						speler2gewonnen+=1
 				else:
 					print("__________")
 					print("|        |")
@@ -76,8 +85,13 @@ while looping:
 					print("|")
 					print("|_______")
 					loop=False
-					print(f"aww sorry maar je hebt verloren speler 2, het woord was: {woord}" )
-					speler1gewonnen+=1
+					
+					if looped%2==0:
+						print(f"aww sorry maar je hebt verloren speler 1, het woord was: {woord}" )
+						speler2gewonnen+=1
+					else:
+						print(f"aww sorry maar je hebt verloren speler 2, het woord was: {woord}" )
+						speler1gewonnen+=1
 				
 				loop=False
 			
@@ -93,8 +107,12 @@ while looping:
 					print("|")
 					print("|_______")
 					loop=False
-					print(f"aww sorry maar je hebt verloren speler 2, het woord was: {woord}" )
-					speler1gewonnen+=1
+					if looped%2==0:
+						print(f"aww sorry maar je hebt verloren speler 1, het woord was: {woord}" )
+						speler2gewonnen+=1
+					else:
+						print(f"aww sorry maar je hebt verloren speler 2, het woord was: {woord}" )
+						speler1gewonnen+=1
 			while canguess=="ja":
 				if hoeveelsetguess>=1 and hoeveelsetguess!=1:
 					print(previousguess)
@@ -231,8 +249,12 @@ while looping:
 							print("|")
 							print("|_______")
 							loop=False
-							print(f"aww sorry maar je hebt verloren speler 2, het woord was: {woord}" )
-							speler1gewonnen+=1
+							if looped%2==0:
+								print(f"aww sorry maar je hebt verloren speler 1, het woord was: {woord}" )
+								speler2gewonnen+=1
+							else:
+								print(f"aww sorry maar je hebt verloren speler 2, het woord was: {woord}" )
+								speler1gewonnen+=1
 							canguess=False
 							exit
 						#al die if badguess id dit dingen kijken gewoon in welke state de strop is
