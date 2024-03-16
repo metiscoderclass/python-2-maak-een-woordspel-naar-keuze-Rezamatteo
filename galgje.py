@@ -10,6 +10,19 @@ woordindexdifficulty1=['hallo,','wereld','mens','ei']
 woordindexdifficulty2=['limousine','familie','computer']
 woordindexdifficulty3=['kippeneieren','computermuis','tafeltennis']
 
+def display_word(word, guessed_letters):
+    displayed_word = ""
+    for letter in word:
+        if letter in guessed_letters:
+            displayed_word += letter
+        else:
+            displayed_word += "_"
+    return displayed_word
+
+
+
+
+
 def find_dupes(word,letter):
 	dupes=[]
 	for letter in word:
@@ -34,10 +47,12 @@ while looping:
 	previousguessbutguessform=""
 	previousguess=" "
 	previousindex=""
+	difficulty=""
 	if looped==0:
 		print("welkom bij galgje")
 	else:
 		print("hallo, welkom alweer bij galgje")
+	
 	#alles hiervoor zet gewoon de variables. alles in de loop mag steeds gereset worden en alles buiten de loop niet
 	
 	print("de stand is nu "+str(speler1gewonnen)+"-"+str(speler2gewonnen))
@@ -54,6 +69,7 @@ while looping:
 		#hierstopt hij gewoon het programma als je qq intypt
 	else:
 		print("\n"*10000)
+		difficulty=input("voor we beginnen wat moet de difficulty zijn, makkelijk, normaal of moeilijk? ")
 		if looped%2==0:
 			print("oke speler 1, het woord dat je moet raden heeft ", len(woord),  " letters")
 		else:
@@ -68,7 +84,12 @@ while looping:
 			if guessedright==len(woord):
 				#dit activeert zodraa je alle letters die in het woord zijn zijn geraden
 				cangues="nee"
-				guessedwoord=input(f"Nu je alle letters hebt zal je het woord moeten raden. en nog een keer als reminder, dit zijn je letters: {lettersright}. Dus wat is het woord volgens jou? ")
+				if difficulty=="makkelijk":
+					guessedwoord=woord
+				elif difficulty=="normaal":
+					guessedwoord=input(f"Nu je alle letters hebt zal je het woord moeten raden. en nog een keer als reminder, dit zijn je letters: {lettersright}. Dus wat is het woord volgens jou? ")
+				else:
+					guessedwoord=input("nu je alle letters hebt kan je het woord gaan raden!")
 				if guessedwoord==woord:
 					print("woohoo, je hebt het woord geraden")
 					if looped%2==0:
@@ -122,21 +143,30 @@ while looping:
 						previousindex=woord.index(previousguess)
 						previousindex+=1
 						# previousindex is de hoeveelste letter in het woord je laatste gok was. ik doe er 1 bij omdat het anders 1 te laag is :)
-						print(f"je vorige gok, {previousguess},was de "+str(previousindex)+"e letter van het woord!")
-						if previousguess in dupes:
+						if difficulty=="makkelijk":
+							pass
+						elif difficulty=="normaal":
+							print(f"je vorige gok, {previousguess},was de "+str(previousindex)+"e letter van het woord!")
+						if previousguess in dupes and difficulty=="normaal":
 							print(f"{previousguess} komt meer dan een keer voor in dit woord")
 						volledigevorigeguess=f"{previousguess} {previousindex}"
 						#volledigevorigeguess is je vorige gok en de hoeveelste letter het was in het woord
 						lettersright.append(volledigevorigeguess)
 						# .append zorgt ervoor dat die gokken worden toegevoegd aan een lijst
-						print(f"je letters waren: {lettersright}")
+						if difficulty=="normaal":
+							print(f"je letters waren: {lettersright}")
 						#die lijst wordt hier geprint
 						
 						print("_ "*len(woord))
 					else:
 						print("je vorige gok zat helaas niet in het woord")
 						print("en even als reminder er zijn "+str(len(woord))+" letters")
-				print(f"je letters waren: {lettersright}")
+				
+				if difficulty=="makkelijk":
+					print("het woord dat je tot nu toe hebt is:",display_word(woord,guessed))
+				elif difficulty=="normaal":
+					print(f"je letters waren: {lettersright}")
+				
 				guess=input("ok, dus wat is je "+str(hoeveelsetguess)+"e gok? ")
 				hoeveelsetguess+=1
 				if not guess in guessed:
