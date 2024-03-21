@@ -1,5 +1,8 @@
+import time
+import random
 looping=True
-
+welke=""
+cpkiezen=False
 dupes=0
 speler1gewonnen=0
 speler2gewonnen=0
@@ -9,6 +12,7 @@ lettersright=[]
 woordindexdifficulty1=['hallo,','wereld','mens','ei']
 woordindexdifficulty2=['limousine','familie','computer']
 woordindexdifficulty3=['kippeneieren','computermuis','tafeltennis']
+
 
 def display_word(word, guessed_letters):
     displayed_word = ""
@@ -32,8 +36,11 @@ def find_dupes(word,letter):
 
 
 
-
+speler1=input("speler 1 wat is je naam?")
+speler2=input("speler 2 wat is je naam?")
 while looping:
+	print(woordindexdifficulty1,woordindexdifficulty2,woordindexdifficulty3)
+	loaded_data=None
 	dupes=0
 	lettersright=[]
 	looped+=1
@@ -56,10 +63,14 @@ while looping:
 	#alles hiervoor zet gewoon de variables. alles in de loop mag steeds gereset worden en alles buiten de loop niet
 	
 	print("de stand is nu "+str(speler1gewonnen)+"-"+str(speler2gewonnen))
-	if looped%2==0:
-		woord=input("speler2 wat moet het woord zijn? ")
+	welke=input("wil je zelf kiezen of wil je dat de computer voor je kiest?")
+	if "zelf" in welke:
+		if looped%2==0:
+			woord=input(f"{speler2} wat moet het woord zijn? ")
+		else:
+			woord=input(f"{speler1} wat moet het woord zijn? ")
 	else:
-		woord=input("speler1 wat moet het woord zijn? ")
+		cpkiezen=True
 	if woord=="qq":
 		print("okee...")
 		print("de uiteindelijke stand is geworden "+str(speler1gewonnen)+"-"+str(speler2gewonnen))
@@ -70,10 +81,25 @@ while looping:
 	else:
 		print("\n"*10000)
 		difficulty=input("voor we beginnen wat moet de difficulty zijn, makkelijk, normaal of moeilijk? ")
-		if looped%2==0:
-			print("oke speler 1, het woord dat je moet raden heeft ", len(woord),  " letters")
+		if difficulty=="makkelijk":
+			diff=1
+		elif difficulty=="normaal":
+			diff=2
 		else:
-			print("oke speler 2, het woord dat je moet raden heeft ", len(woord),  " letters")
+			diff=3
+		if cpkiezen==True:
+			if diff==1:
+				woord=random.choice(woordindexdifficulty1)
+			elif diff==2:
+				woord=random.choice(woordindexdifficulty2)
+			elif diff ==3:
+				woord=random.choice(woordindexdifficulty3)
+			print(woord)
+		start_time = time.time()	
+		if looped%2==0:
+			print(f"oke {speler2}, het woord dat je moet raden heeft ", len(woord),  " letters")
+		else:
+			print(f"oke {speler1}, het woord dat je moet raden heeft ", len(woord),  " letters")
 		print("_ "*len(woord))
 		letters=len(woord)
 		#dit gedeelte (was gek genoeg super makkelijk) zorgt er eerst voor dat de tweede speler niet kan spieken bij de eerste speler en typt even veel underscore als er letters zijn in het woord
@@ -91,11 +117,31 @@ while looping:
 				else:
 					guessedwoord=input("nu je alle letters hebt kan je het woord gaan raden!")
 				if guessedwoord==woord:
-					print("woohoo, je hebt het woord geraden")
+					end_time = time.time()
+					elapsed_time_seconds = end_time - start_time
+					elapsed_time_struct = time.gmtime(elapsed_time_seconds)
+					elapsed_time_formatted = time.strftime("%H:%M:%S", elapsed_time_struct)
+					print("you took",elapsed_time_formatted,"to guess the word")
+					win_score=1+diff*1000/elapsed_time_seconds
+					
+					win_score=round(win_score)
+					if win_score<1:
+						win_score=1
+					elif win_score>9:
+						win_score=10
 					if looped%2==0:
-						speler1gewonnen+=1
+						speler2gewonnen+=win_score
 					else:
-						speler2gewonnen+=1
+						speler1gewonnen+=win_score
+					couldofniet=input("wil je dit woord aan de computers lijst toevoegen?")
+					if diff==1:
+						woordindexdifficulty1.append(woord)
+					elif diff==2:
+						woordindexdifficulty2.append(woord)
+					elif diff==3:
+						woordindexdifficulty3.append(woord)
+						
+							
 				else:
 					print("__________")
 					print("|        |")
@@ -108,11 +154,11 @@ while looping:
 					loop=False
 					
 					if looped%2==0:
-						print(f"aww sorry maar je hebt verloren speler 1, het woord was: {woord}" )
-						speler2gewonnen+=1
-					else:
-						print(f"aww sorry maar je hebt verloren speler 2, het woord was: {woord}" )
+						print(f"aww sorry maar je hebt verloren {speler2}, het woord was: {woord}" )
 						speler1gewonnen+=1
+					else:
+						print(f"aww sorry maar je hebt verloren {speler1}, het woord was: {woord}" )
+						speler2gewonnen+=1
 				
 				loop=False
 			
@@ -129,11 +175,11 @@ while looping:
 					print("|_______")
 					loop=False
 					if looped%2==0:
-						print(f"aww sorry maar je hebt verloren speler 1, het woord was: {woord}" )
-						speler2gewonnen+=1
-					else:
-						print(f"aww sorry maar je hebt verloren speler 2, het woord was: {woord}" )
+						print(f"aww sorry maar je hebt verloren {speler2}, het woord was: {woord}" )
 						speler1gewonnen+=1
+					else:
+						print(f"aww sorry maar je hebt verloren {speler1}, het woord was: {woord}" )
+						speler2gewonnen+=1
 			while canguess=="ja":
 				if hoeveelsetguess>=1 and hoeveelsetguess!=1:
 					print(previousguess)
@@ -280,11 +326,11 @@ while looping:
 							print("|_______")
 							loop=False
 							if looped%2==0:
-								print(f"aww sorry maar je hebt verloren speler 1, het woord was: {woord}" )
-								speler2gewonnen+=1
-							else:
-								print(f"aww sorry maar je hebt verloren speler 2, het woord was: {woord}" )
+								print(f"aww sorry maar je hebt verloren {speler2}, het woord was: {woord}" )
 								speler1gewonnen+=1
+							else:
+								print(f"aww sorry maar je hebt verloren {speler1}, het woord was: {woord}" )
+								speler2gewonnen+=1
 							canguess=False
 							exit
 						#al die if badguess id dit dingen kijken gewoon in welke state de strop is
